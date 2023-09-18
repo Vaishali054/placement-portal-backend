@@ -1,6 +1,6 @@
 from django.db import models
 from company.models import Company
-from course.models import Cluster,Specialization
+from course.models import Cluster,Specialization, Course
 from validators import Validate_file_size
 from django.core.validators import RegexValidator, FileExtensionValidator, MaxValueValidator
 from tpr.models import TPR
@@ -30,7 +30,14 @@ class Drive(models.Model):
     noOfPersonsVisiting = models.IntegerField(default=0) # 0 if drive is virtual
     jobLocation = models.CharField(max_length=100) # Separate different job locations with any delimeter
     starting_date = models.DateField()
+    courses = models.ManyToManyField(Course)
+    branches = models.ManyToManyField(Specialization)
+    cgpi = models.IntegerField(default=0)
+    allowStudentsWithBacklogs = models.BooleanField(default=True)
+    jobProfile = models.CharField(max_length=100, default="SDE1")
     # closed_date = models.DateField()
+    drive_status = models.CharField(default="Upcoming", choices = [('Upcoming','Upcoming'),('Ongoing','Ongoing'),('Completed','Completed')], max_length=20)
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     # job_roles = models.ManyToManyField(JobRoles) => it one to many relation so there should be foreignkey in jobrole table
@@ -38,7 +45,7 @@ class Drive(models.Model):
     # drive type based on company type for e.g. IT, Mech Core, EE Core, etc..
     session = models.CharField(max_length=7,validators=[RegexValidator(regex=r'\d{4}[-]\d{2}$')])
     job_type = models.CharField(max_length=15, choices=jtype)
-    tpr = models.ForeignKey(TPR,on_delete=models.CASCADE,null=True)
+    # tpr = models.ForeignKey(TPR,on_delete=models.CASCADE,null=True)
     closed_date = models.DateTimeField(null=True)
 
     class Meta:

@@ -77,7 +77,8 @@ class DriveList(generics.ListCreateAPIView):
             session = str(curr_date.year-1) + "-"+str(curr_date.year)[2:]
         else:
             session = str(curr_date.year) + "-"+str(curr_date.year+1)[2:]
-        
+        queryset = Drive.objects.filter()   
+        return queryset
         if self.request.user.username == "tpo@nith.ac.in":
             queryset = Drive.objects.filter()
             return queryset

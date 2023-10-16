@@ -84,6 +84,7 @@ class Student(models.Model):
     gap_ug_pg = models.IntegerField(default=0)
     banned_date = models.DateTimeField(default=timezone.now)
     over_date = models.DateTimeField(default=timezone.now)
+    resume = models.CharField(default="", max_length=200)
 
     objects = models.Manager()
     banned = StudentManager()

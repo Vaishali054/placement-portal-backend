@@ -71,6 +71,7 @@ class StudentSerializer(serializers.ModelSerializer):
     class_12_domicile = serializers.SlugRelatedField(queryset = State.objects.all(),slug_field='name')
     
     def get_eligibility(self,item):
+        print(item)
         result = {}
         try:
             course_year = CourseYearAllowed.objects.get(course=item.course,year=item.current_year)
@@ -96,7 +97,8 @@ class StudentSerializer(serializers.ModelSerializer):
         return result
 
     def get_isBanned(self,item):
-        return (item.banned_date < timezone.now() and item.over_date > timezone.now())
+        # return (item.banned_date < timezone.now() and item.over_date > timezone.now())
+        return False
 
     class Meta:
         model = Student
@@ -113,6 +115,7 @@ class StudentSerializer(serializers.ModelSerializer):
         return student
 
     def update(self, instance, validated_data):
+        print(validated_data)
         instance.first_name = validated_data.get('first_name',instance.first_name)
         instance.middle_name = validated_data.get('middle_name',instance.middle_name)
         instance.last_name = validated_data.get('last_name',instance.last_name)
@@ -132,6 +135,7 @@ class StudentSerializer(serializers.ModelSerializer):
         instance.active_backlog = validated_data.get('active_backlog',instance.active_backlog)
         instance.total_backlog = validated_data.get('total_backlog',instance.total_backlog)
         instance.linkedin = validated_data.get('linkedin',instance.linkedin)
+        instance.resume = validated_data.get('resume', instance.resume)
         instance.save()
         return instance
 

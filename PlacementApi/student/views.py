@@ -160,12 +160,12 @@ class StudentExcel(APIView):
 class StudentDetail(APIView):
     permission_classes = [permissions.IsAuthenticated]  
     def get(self,request,pk):
-        students = Student.objects.get(roll__username=pk)
+        students = Student.objects.all().filter(roll__username=pk)
         serialized_data = StudentSerializer(students)
         return Response(serialized_data.data)
 
     def put(self,request,pk):
-        student = Student.objects.get(roll__username = pk)
+        student = Student.objects.all().filter(roll__username=pk)
         update_student = StudentSerializer(instance=student,data = request.data)
         if update_student.is_valid():
             update_student.save()
@@ -173,7 +173,7 @@ class StudentDetail(APIView):
         return Response(update_student.errors,status=status.HTTP_400_BAD_REQUEST)
         
     def delete(self,request,pk):
-        student = Student.objects.get(roll__username = pk)
+        student = Student.objects.all().filter(roll__username=pk)
         print(student)
         student.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)

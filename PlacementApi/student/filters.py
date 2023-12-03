@@ -19,13 +19,14 @@ class PPOFilter(django_filters.FilterSet):
 
 class StudentFilter(django_filters.FilterSet):
     student = django_filters.CharFilter(field_name='roll__username',lookup_expr='iexact')
+    firstName = django_filters.CharFilter(field_name='first_name',lookup_expr='iexact')
     cgpi = django_filters.NumberFilter(field_name='cgpi',lookup_expr='gte')
     gender = django_filters.CharFilter(field_name='gender',lookup_expr='iexact')
     branch = django_filters.CharFilter(field_name='branch__branchName',lookup_expr='iexact')
     course =django_filters.CharFilter(field_name='course__name',lookup_expr='iexact')
     class Meta:
         model = Student
-        fields = ['student','cgpi','branch','course','pwd', 'gender']
+        fields = ['student','firstName', 'cgpi','branch','course','pwd', 'gender']
 
 
 class StudentTPOFilter(django_filters.FilterSet):

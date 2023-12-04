@@ -42,7 +42,7 @@ class AnnouncementAPIView(generics.ListCreateAPIView):
         if request_type == "general" or request_type == "results":
             serializer = self.serializer_class_General(data=request.data)
             pass
-        elif request_type == "placement/intern":
+        elif request_type == "company":
             serializer = self.serializer_class_Company(data=request.data)
             pass
         else:

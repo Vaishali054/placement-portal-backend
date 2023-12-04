@@ -11,6 +11,8 @@ from rest_framework import generics,filters, status, permissions
 from accounts import permissions as custom_permissions
 from student.pagination import CustomPagination
 from rest_framework.response import Response
+from django.http import JsonResponse
+
 
 class CreateCompanyAPIView(APIView):
     queryset = Company.objects.all()
@@ -19,6 +21,14 @@ class CreateCompanyAPIView(APIView):
     filter_backends = [filters.SearchFilter]
     search_fields = ('name',)
     
+    def get(self,request):
+        queryset = Company.objects.all().values('name')
+        # Convert the queryset to a list of company names.
+        company_names = list(queryset)
+
+        # Return the list of company names.
+        return Response(company_names)
+
     def post(self, request, *args, **kwargs):
         serializer = CompanySerializer(data=request.data)
         if serializer.is_valid():

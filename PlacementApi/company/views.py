@@ -7,10 +7,36 @@ from accounts.utils import GetSession
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.exceptions import APIException
-from rest_framework import generics,filters
-from rest_framework import permissions
+from rest_framework import generics,filters, status, permissions
 from accounts import permissions as custom_permissions
 from student.pagination import CustomPagination
+from rest_framework.response import Response
+from django.http import JsonResponse
+
+
+class CreateCompanyAPIView(APIView):
+    queryset = Company.objects.all()
+    serializer_class = CompanySerializer
+    # pagination_class = CustomPagination
+    filter_backends = [filters.SearchFilter]
+    search_fields = ('name',)
+    
+    def get(self,request):
+        queryset = Company.objects.all().values('name')
+        # Convert the queryset to a list of company names.
+        company_names = list(queryset)
+
+        # Return the list of company names.
+        return Response(company_names)
+
+    def post(self, request, *args, **kwargs):
+        serializer = CompanySerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            print(serializer.errors)
+            raise APIException(serializer.errors)
 
 class CompanyDetailAPIView(generics.RetrieveUpdateAPIView):
     queryset = Company.objects.all()
